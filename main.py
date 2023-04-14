@@ -54,13 +54,11 @@ class Mochila:
         
     def nrp_knapsack(self, weight):
         self.requisitos.sort(key=lambda x: (x.obtener_valor()/x.peso), reverse=True) 
-        final_value = 0.0
         num_reqs = 0
     
         for req in self.requisitos:
             if req.peso <= weight:
                 weight -= req.peso
-                final_value += req.obtener_valor()
                 num_reqs+=1
                 
         return self.requisitos[0:num_reqs]
@@ -125,4 +123,5 @@ requisitos.append(req5)
 
 #Mochila creation and print knapsack method
 mochila = Mochila(requisitos)
+print("Mochila resultado : ")
 print(*mochila.nrp_knapsack(3))
