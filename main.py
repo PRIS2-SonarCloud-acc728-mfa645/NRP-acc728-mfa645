@@ -47,15 +47,15 @@ class Mochila:
     def __init__(self, requisitos:List[Requisito]):
         self.requisitos:List[Requisito] = requisitos
         
-    def NRPKnapsack(self, W):
+    def nrp_knapsack(self, weight):
         self.requisitos.sort(key=lambda x: (x.obtener_valor/req.peso), reverse=True) 
-        finalvalue = 0.0
+        final_value = 0.0
         num_reqs = 0
     
         for req in self.requisitos:
-            if req.peso <= W:
-                W -= req.peso
-                finalvalue += req.obtener_valor
+            if req.peso <= weight:
+                weight -= req.peso
+                final_value += req.obtener_valor
                 num_reqs+=1
                 
         return self.requisitos[0:num_reqs]
