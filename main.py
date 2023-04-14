@@ -18,6 +18,9 @@ class Requisito:
         for st in self.stakeholders:
             valor += len(st.recomendado_por)
         return valor
+        
+    def __str__(self) -> str:
+        return self.descripcion
 
 class Stakeholder:
 
@@ -36,7 +39,9 @@ class Stakeholder:
         if not self.req_recomendados.__contains__(requisito):
             self.req_recomendados.append(requisito)
             requisito.stakeholders.append(self)
-
+            
+    def __str__(self) -> str:
+        return self.nombre
 class Relacion(Enum):
     IMPLICACION = "Implicacion"
     COMBINACION = "Combinacion"
@@ -48,15 +53,76 @@ class Mochila:
         self.requisitos:List[Requisito] = requisitos
         
     def nrp_knapsack(self, weight):
-        self.requisitos.sort(key=lambda x: (x.obtener_valor/req.peso), reverse=True) 
+        self.requisitos.sort(key=lambda x: (x.obtener_valor()/x.peso), reverse=True) 
         final_value = 0.0
         num_reqs = 0
     
         for req in self.requisitos:
             if req.peso <= weight:
                 weight -= req.peso
-                final_value += req.obtener_valor
+                final_value += req.obtener_valor()
                 num_reqs+=1
                 
         return self.requisitos[0:num_reqs]
+    
 
+
+
+#Stakeholder creation
+st1 = Stakeholder("St1")
+st2 = Stakeholder("St2")
+st3 = Stakeholder("St3")
+st4 = Stakeholder("St4")
+
+#Stakeholder recomendations
+st2.recomendar_stakeholder(st1)
+
+st1.recomendar_stakeholder(st2)
+
+st1.recomendar_stakeholder(st3)
+
+st1.recomendar_stakeholder(st4)
+st2.recomendar_stakeholder(st4)
+st3.recomendar_stakeholder(st4)
+
+#Requisitos creation
+req1 = Requisito("Requisito numero 1")
+req2 = Requisito("Requisito numero 2")
+req3 = Requisito("Requisito numero 3")
+req4 = Requisito("Requisito numero 4")
+req5 = Requisito("Requisito numero 5")
+
+#Requisitos recomendation by Stakeholders
+st1.recomendar_requisito(req2)
+
+st1.recomendar_requisito(req5)
+st2.recomendar_requisito(req5)
+
+st1.recomendar_requisito(req4)
+st2.recomendar_requisito(req4)
+st3.recomendar_requisito(req4)
+
+st1.recomendar_requisito(req3)
+st2.recomendar_requisito(req3)
+st3.recomendar_requisito(req3)
+st4.recomendar_requisito(req3)
+
+
+#Requisitos relations
+req1.relacionar(req2, "Combinacion")
+req2.relacionar(req1, "Combinacion")
+req2.relacionar(req3, "Implicacion")
+req4.relacionar(req5, "Exclusion")
+req5.relacionar(req4, "Exclusion")
+
+#List creation and req addition
+requisitos: List[Requisito] = []
+requisitos.append(req1)
+requisitos.append(req2)
+requisitos.append(req3)
+requisitos.append(req4)
+requisitos.append(req5)
+
+#Mochila creation and print knapsack method
+mochila = Mochila(requisitos)
+print(*mochila.nrp_knapsack(3))
