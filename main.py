@@ -1,6 +1,7 @@
 from typing import List
 from enum import Enum
 
+#Gate Quality in SonarCloud created
 class Requisito:
 
     def __init__(self, descripcion):
